@@ -8,7 +8,6 @@ export const AboutSection = () => {
   const containerRef = useRef<HTMLElement>(null);
   const textRefs = useRef<(HTMLDivElement | null)[]>([]);
   const paraRef = useRef<HTMLParagraphElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -43,7 +42,7 @@ export const AboutSection = () => {
         
         // Horizontal shift
         tl.to(el, {
-          x: index % 2 === 0 ? '5vw' : '-5vw',
+          x: index % 2 === 0 ? '3vw' : '-3vw',
           ease: 'none'
         }, 0);
       });
@@ -55,32 +54,14 @@ export const AboutSection = () => {
         0.3
       );
 
-      // Grid parallax
-      tl.to(gridRef.current, {
-        y: '10vh',
-        ease: 'none'
-      }, 0);
-
     }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={containerRef} className="relative z-10 w-full flex flex-col justify-center px-6 md:px-24 py-24 md:py-32 overflow-hidden bg-background perspective-[1000px]">
+    <section ref={containerRef} className="relative z-10 w-full flex flex-col justify-center px-6 md:px-24 py-24 md:py-32 overflow-hidden bg-transparent perspective-[1000px]">
       
-      {/* Subtle animated grid background */}
-      <div 
-        ref={gridRef}
-        className="absolute inset-0 z-0 opacity-5 pointer-events-none"
-        style={{
-          backgroundImage: 'linear-gradient(var(--foreground) 1px, transparent 1px), linear-gradient(90deg, var(--foreground) 1px, transparent 1px)',
-          backgroundSize: '4rem 4rem',
-          height: '150%',
-          top: '-25%'
-        }}
-      />
-
       <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-24 items-center">
         
         <div className="flex-1 flex flex-col perspective-[1000px]">
@@ -88,7 +69,7 @@ export const AboutSection = () => {
             <div 
               key={i} 
               ref={el => textRefs.current[i] = el}
-              className="font-display text-[12vw] md:text-[8vw] leading-[0.85] tracking-tighter uppercase will-change-transform transform-style-3d"
+              className="font-display text-[11vw] md:text-[7vw] leading-[0.9] tracking-tight uppercase will-change-transform transform-style-3d text-foreground font-bold"
             >
               {line}
             </div>
@@ -98,7 +79,7 @@ export const AboutSection = () => {
         <div className="w-full md:w-1/3 flex justify-end">
           <p 
             ref={paraRef}
-            className="font-sans text-sm md:text-base leading-relaxed text-foreground/80 font-medium max-w-sm uppercase tracking-wider"
+            className="font-sans text-sm md:text-sm leading-relaxed text-muted-foreground font-medium max-w-sm uppercase tracking-wider border-l-2 border-accent pl-4"
           >
             Zeel is a Computer Engineering student deeply interested in software engineering, web development, and crafting creative frontend experiences that blur the line between technology and art.
           </p>

@@ -2,34 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    /* Using #F3F0E8 for the background which is HSL 43 27% 93% */
-    --background: 43 27% 93%;
-    --foreground: 0 0% 12%; /* Dark charcoal / black */
-    --card: 43 27% 93%;
-    --card-foreground: 0 0% 12%;
-    --popover: 43 27% 93%;
-    --popover-foreground: 0 0% 12%;
-    --primary: 0 0% 12%;
-    --primary-foreground: 43 27% 93%;
-    --secondary: 43 10% 88%;
-    --secondary-foreground: 0 0% 12%;
-    --muted: 43 10% 86%;
-    --muted-foreground: 0 0% 40%;
-    --accent: 15 35% 48%; /* Muted rust / terracotta */
-    --accent-foreground: 43 27% 93%;
+    /* Soft warm white / very light cream */
+    --background: 40 33% 98%; 
+    /* Deep navy / dark blue-black */
+    --foreground: 222 47% 11%; 
+    --card: 40 33% 98%;
+    --card-foreground: 222 47% 11%;
+    --popover: 40 33% 98%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 222 47% 11%;
+    --primary-foreground: 40 33% 98%;
+    --secondary: 222 20% 90%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 222 20% 88%;
+    /* Soft gray */
+    --muted-foreground: 215 16% 47%; 
+    /* Muted electric blue */
+    --accent: 225 73% 57%; 
+    --accent-foreground: 40 33% 98%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 43 27% 93%;
-    --border: 0 0% 85%;
-    --input: 0 0% 85%;
-    --ring: 15 35% 48%;
+    --destructive-foreground: 40 33% 98%;
+    --border: 222 20% 85%;
+    --input: 222 20% 85%;
+    --ring: 225 73% 57%;
     --radius: 0rem;
 
     --font-sans: 'Inter', sans-serif;
-    --font-display: 'Anton', sans-serif;
+    --font-display: 'Space Grotesk', sans-serif;
   }
 }
 
@@ -44,14 +47,14 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     cursor: none; /* Hide default cursor */
-    background-color: #F3F0E8 !important; /* Force the requested color */
+    background-color: hsl(var(--background)) !important;
   }
   a, button, [role="button"], input, select, textarea {
     cursor: none; /* Ensure interactive elements don't show default cursor */
   }
 }
 
-/* Noise overlay - refined for a premium paper texture */
+/* Fine grid pattern for modern technical feel */
 .noise-overlay {
   position: fixed;
   top: 0;
@@ -60,9 +63,11 @@
   height: 100vh;
   pointer-events: none;
   z-index: 9990;
-  opacity: 0.5;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.7'/%3E%3C/svg%3E");
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 1;
 }
 
 /* Hide scrollbar for lenis */

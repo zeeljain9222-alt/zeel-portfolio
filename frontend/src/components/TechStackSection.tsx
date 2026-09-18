@@ -96,17 +96,14 @@ export const TechStackSection = () => {
       data-cursor-type="tech"
     >
       
-      {/* Global Background Grid */}
-      <div className="absolute inset-0 pointer-events-none opacity-5" style={{ backgroundImage: 'linear-gradient(var(--foreground) 1px, transparent 1px), linear-gradient(90deg, var(--foreground) 1px, transparent 1px)', backgroundSize: '100px 100px' }} />
-
       {/* Global Static UI Elements */}
-      <div className="absolute top-12 left-12 font-mono text-[10px] text-foreground/40 uppercase tracking-widest hidden md:block z-50">
+      <div className="absolute top-12 left-12 font-mono text-[10px] text-muted-foreground uppercase tracking-widest hidden md:block z-50">
         SYS.REQ. // V.3.1.4<br/>
         CALIBRATING_DATA_STREAM...<br/>
-        STATUS: ONLINE
+        <span className="text-accent mt-1 inline-block">STATUS: ONLINE</span>
       </div>
       
-      <div className="absolute bottom-12 right-12 font-mono text-[10px] text-foreground/40 uppercase tracking-widest text-right hidden md:block z-50">
+      <div className="absolute bottom-12 right-12 font-mono text-[10px] text-muted-foreground uppercase tracking-widest text-right hidden md:block z-50">
         TECHNICAL<br/>
         ANALYSIS_MATRIX
       </div>
@@ -120,36 +117,36 @@ export const TechStackSection = () => {
           <div className="relative w-full max-w-7xl h-full flex items-center justify-center">
             
             {/* Dynamic decorative lines per skill */}
-            <div className={`tech-line absolute top-[20%] ${i % 2 === 0 ? 'left-0' : 'right-0'} w-[30%] h-[1px] bg-foreground/20 origin-${i % 2 === 0 ? 'left' : 'right'}`} />
-            <div className={`tech-line absolute bottom-[20%] ${i % 2 === 0 ? 'right-0' : 'left-0'} w-[40%] h-[1px] bg-foreground/20 origin-${i % 2 === 0 ? 'right' : 'left'}`} />
-            <div className="tech-line absolute left-[10%] top-0 w-[1px] h-[30%] bg-foreground/20 origin-top" />
+            <div className={`tech-line absolute top-[20%] ${i % 2 === 0 ? 'left-0' : 'right-0'} w-[30%] h-[1px] bg-accent/20 origin-${i % 2 === 0 ? 'left' : 'right'}`} />
+            <div className={`tech-line absolute bottom-[20%] ${i % 2 === 0 ? 'right-0' : 'left-0'} w-[40%] h-[1px] bg-accent/20 origin-${i % 2 === 0 ? 'right' : 'left'}`} />
+            <div className="tech-line absolute left-[10%] top-0 w-[1px] h-[30%] bg-accent/20 origin-top" />
             
             {/* Main Typographic Element */}
             <div className="relative z-10 flex flex-col items-center">
-              <span className="skill-id font-mono text-xl md:text-2xl text-accent mb-4 tracking-widest">{skill.id}</span>
+              <span className="skill-id font-mono text-xs md:text-sm text-accent mb-6 tracking-widest border border-accent/20 bg-accent/5 px-3 py-1">{skill.id}</span>
               
-              <h2 className="skill-name font-display text-[15vw] md:text-[12vw] uppercase tracking-tighter leading-none text-foreground mix-blend-multiply relative">
+              <h2 className="skill-name font-display text-[14vw] md:text-[10vw] uppercase tracking-tight leading-none text-foreground mix-blend-multiply relative font-bold">
                 {skill.name}
                 {/* Subtle duplicate for glitch/depth effect */}
-                <span className="absolute inset-0 text-foreground/5 translate-x-2 translate-y-2 pointer-events-none">{skill.name}</span>
+                <span className="absolute inset-0 text-accent/10 translate-x-1 translate-y-1 pointer-events-none">{skill.name}</span>
               </h2>
               
-              <div className="skill-type font-sans text-sm md:text-lg font-bold tracking-[0.3em] uppercase text-foreground/60 mt-8 border-b border-foreground/20 pb-2 px-8">
+              <div className="skill-type font-sans text-xs md:text-sm font-bold tracking-[0.3em] uppercase text-muted-foreground mt-8 border-b border-accent/20 pb-2 px-8">
                 {skill.type}
               </div>
             </div>
 
             {/* Floating Technical Markers */}
-            <div className="skill-coord absolute top-[15%] right-[15%] font-mono text-[10px] text-foreground/40 border border-foreground/10 p-2 hidden md:block">
+            <div className="skill-coord absolute top-[15%] right-[15%] font-mono text-[10px] text-muted-foreground border border-accent/10 bg-accent/5 p-2 hidden md:block">
               {skill.coord}<br/>
               FREQ: {100 + i * 15}HZ
             </div>
             
             {/* Abstract geometric shape based on index */}
-            <div className={`absolute ${i % 2 === 0 ? 'left-[20%] bottom-[30%]' : 'right-[20%] top-[30%]'} opacity-10 pointer-events-none`}>
-              {i % 3 === 0 && <div className="w-32 h-32 rounded-full border border-foreground" />}
-              {i % 3 === 1 && <div className="w-32 h-32 border border-foreground rotate-45" />}
-              {i % 3 === 2 && <div className="w-32 h-4 border-y border-foreground" />}
+            <div className={`absolute ${i % 2 === 0 ? 'left-[20%] bottom-[30%]' : 'right-[20%] top-[30%]'} opacity-20 pointer-events-none`}>
+              {i % 3 === 0 && <div className="w-32 h-32 rounded-full border border-accent" />}
+              {i % 3 === 1 && <div className="w-32 h-32 border border-accent rotate-45" />}
+              {i % 3 === 2 && <div className="w-32 h-4 border-y border-accent" />}
             </div>
 
           </div>

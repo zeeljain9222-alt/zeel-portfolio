@@ -15,8 +15,8 @@ export const HeroSection = () => {
     
     entranceTl
       .fromTo('.border-line', 
-        { scaleX: 0 }, 
-        { scaleX: 1, duration: 1.5, ease: 'expo.inOut', stagger: 0.2 }
+        { scaleX: 0, scaleY: 0 }, 
+        { scaleX: 1, scaleY: 1, duration: 1.5, ease: 'expo.inOut', stagger: 0.2 }
       )
       .fromTo('.meta-text',
         { y: '100%', opacity: 0 },
@@ -82,26 +82,31 @@ export const HeroSection = () => {
   return (
     <section ref={containerRef} className="relative w-full h-screen flex flex-col justify-between p-6 md:p-12 overflow-hidden bg-background z-0">
       
+      {/* Decorative Lines */}
+      <div className="border-line absolute top-[30%] left-0 w-full h-[1px] bg-accent/20 origin-left" />
+      <div className="border-line absolute bottom-[30%] right-0 w-full h-[1px] bg-accent/20 origin-right" />
+      <div className="border-line absolute left-[20%] top-0 w-[1px] h-full bg-accent/10 origin-top hidden md:block" />
+
       {/* Top Metadata */}
-      <div className="w-full flex justify-between items-start uppercase tracking-widest text-[10px] md:text-xs font-medium z-10 pb-6 relative">
-        <div className="border-line absolute bottom-0 left-0 w-full h-[1px] bg-foreground/15 origin-left" />
+      <div className="w-full flex justify-between items-start uppercase tracking-widest text-[9px] md:text-[10px] font-medium z-10 pb-6 relative">
         <div className="flex flex-col gap-1 overflow-hidden">
-          <span className="meta-text text-foreground">03 / Computer Engineering</span>
-          <span className="meta-text text-foreground/50">Student</span>
+          <span className="meta-text text-foreground font-bold">03 / COMPUTER ENG.</span>
+          <span className="meta-text text-muted-foreground">[ SYS.INIT_2026 ]</span>
         </div>
         <div className="overflow-hidden text-right">
-          <span className="meta-text text-foreground">Portfolio 2026</span>
+          <span className="meta-text text-accent font-bold">PORTFOLIO // 1.0</span>
         </div>
       </div>
 
       {/* Main Typography & Asymmetric Layout */}
-      <div className="flex flex-col justify-center flex-grow relative z-0 pointer-events-none w-full max-w-screen-2xl mx-auto mt-12 md:mt-0">
+      <div className="flex flex-col justify-center flex-grow relative z-0 pointer-events-none w-full max-w-screen-2xl mx-auto mt-8 md:mt-0">
         
         {/* Asymmetric ZEEL */}
-        <div className="w-full pl-2 md:pl-12 overflow-hidden">
-          <h1 className="font-display text-[20vw] md:text-[18vw] leading-[0.8] tracking-tighter uppercase flex">
+        <div className="w-full pl-2 md:pl-16 overflow-hidden relative">
+          <div className="meta-text absolute left-2 md:left-16 top-0 text-[10px] text-accent font-mono">X:140 Y:200</div>
+          <h1 className="font-display text-[18vw] md:text-[14vw] leading-[0.9] tracking-tight uppercase flex mt-4">
             {zeelLetters.map((letter, i) => (
-              <span key={`zeel-${i}`} className="hero-letter-zeel inline-block relative will-change-transform transform-style-3d text-foreground">
+              <span key={`zeel-${i}`} className="hero-letter-zeel inline-block relative will-change-transform transform-style-3d text-foreground font-bold">
                 {letter}
               </span>
             ))}
@@ -109,20 +114,25 @@ export const HeroSection = () => {
         </div>
 
         {/* Floating editorial text */}
-        <div className="absolute left-6 md:left-32 top-[45%] md:top-1/2 w-48 md:w-64 overflow-hidden z-20">
-          <p className="meta-text font-sans text-[9px] md:text-xs uppercase tracking-widest leading-relaxed text-foreground/60">
-            Crafting digital experiences with a focus on interaction, motion, and typography.
-          </p>
+        <div className="absolute left-6 md:left-[35%] top-[55%] md:top-1/2 w-56 md:w-72 overflow-hidden z-20">
+          <div className="border-l-2 border-accent pl-4">
+            <p className="meta-text font-sans text-[10px] md:text-xs uppercase tracking-widest leading-relaxed text-muted-foreground font-medium">
+              Creative development & digital design. Focusing on interactive interfaces and modern web architecture.
+            </p>
+          </div>
         </div>
         
         {/* Subtle Accent Geometric Shape */}
-        <div className="hero-accent-shape absolute right-[20%] top-[35%] w-16 h-16 md:w-32 md:h-32 border-[1px] border-accent/40 rounded-full mix-blend-multiply" />
+        <div className="hero-accent-shape absolute right-[15%] top-[25%] w-24 h-24 md:w-40 md:h-40 border-[1px] border-accent/30 bg-accent/5 mix-blend-multiply flex items-center justify-center rounded-full">
+           <div className="w-1 h-1 bg-accent rounded-full" />
+        </div>
 
         {/* Asymmetric JAIN */}
-        <div className="w-full pr-2 md:pr-24 flex justify-end overflow-hidden mt-4 md:mt-0">
-          <h1 className="font-display text-[20vw] md:text-[18vw] leading-[0.8] tracking-tighter uppercase flex">
+        <div className="w-full pr-2 md:pr-32 flex justify-end overflow-hidden mt-8 md:mt-0 relative">
+          <div className="meta-text absolute right-2 md:right-32 bottom-full text-[10px] text-muted-foreground font-mono mb-2">VOL. 01</div>
+          <h1 className="font-display text-[18vw] md:text-[14vw] leading-[0.9] tracking-tight uppercase flex text-foreground">
             {jainLetters.map((letter, i) => (
-              <span key={`jain-${i}`} className="hero-letter-jain inline-block relative will-change-transform transform-style-3d text-foreground">
+              <span key={`jain-${i}`} className="hero-letter-jain inline-block relative will-change-transform transform-style-3d font-bold">
                 {letter}
               </span>
             ))}
@@ -131,15 +141,14 @@ export const HeroSection = () => {
       </div>
 
       {/* Bottom Metadata */}
-      <div className="w-full flex justify-between items-end uppercase tracking-widest text-[10px] md:text-xs font-medium z-10 pt-6 relative">
-        <div className="border-line absolute top-0 left-0 w-full h-[1px] bg-foreground/15 origin-right" />
+      <div className="w-full flex justify-between items-end uppercase tracking-widest text-[9px] md:text-[10px] font-medium z-10 pt-6 relative">
         <div className="flex flex-col gap-1 overflow-hidden">
-          <span className="meta-text text-foreground">Software / Web / Creative</span>
-          <span className="meta-text text-accent mt-1">"Improving 0.1% daily."</span>
+          <span className="meta-text text-foreground font-bold">SOFTWARE / WEB / CREATIVE</span>
+          <span className="meta-text text-muted-foreground mt-1">AVAILABLE FOR INTERNSHIPS</span>
         </div>
         <div className="flex flex-col gap-1 text-right overflow-hidden">
-          <span className="meta-text text-foreground">Available for Internships</span>
-          <span className="meta-text text-foreground/50">Mumbai / India</span>
+          <span className="meta-text text-accent font-bold">MUMBAI, INDIA</span>
+          <span className="meta-text text-muted-foreground">"IMPROVING 0.1% DAILY."</span>
         </div>
       </div>
     </section>
