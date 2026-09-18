@@ -46,11 +46,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    cursor: none; /* Hide default cursor */
     background-color: hsl(var(--background)) !important;
-  }
-  a, button, [role="button"], input, select, textarea {
-    cursor: none; /* Ensure interactive elements don't show default cursor */
   }
 }
 

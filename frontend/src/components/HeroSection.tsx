@@ -43,6 +43,10 @@ export const HeroSection = () => {
         scrub: 1,
         pin: true,
         pinSpacing: false, // Allows next section to overlap smoothly
+        onLeaveBack: () => {
+          gsap.set('.hero-letter-zeel, .hero-letter-jain, .meta-text, .border-line', { clearProps: 'all' });
+          entranceTl.restart();
+        }
       }
     });
 
@@ -67,19 +71,10 @@ export const HeroSection = () => {
       y: -40,
       ease: 'power2.inOut'
     }, 0);
-    
-    // Refresh ScrollTrigger when returning to top to fix vanishing elements
-    ScrollTrigger.addEventListener('refresh', () => {
-        if (window.scrollY === 0) {
-            gsap.set('.hero-letter-zeel, .hero-letter-jain, .meta-text, .border-line', { clearProps: 'all' });
-            entranceTl.restart();
-        }
-    });
 
     return () => {
       entranceTl.kill();
       scrollTl.kill();
-      ScrollTrigger.clearEventListeners();
     };
   }, []);
 
