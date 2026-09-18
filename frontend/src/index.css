@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 60 15% 95%; /* Warm off-white */
+    --foreground: 0 0% 10%; /* Very dark grey/black */
+    --card: 60 15% 95%;
+    --card-foreground: 0 0% 10%;
+    --popover: 60 15% 95%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 0 0% 10%;
+    --primary-foreground: 60 15% 95%;
+    --secondary: 0 0% 90%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 60 10% 85%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 15 60% 50%; /* Restrained terracotta/rust */
+    --accent-foreground: 60 15% 95%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 60 15% 95%;
+    --border: 0 0% 80%;
+    --input: 0 0% 80%;
+    --ring: 15 60% 50%;
+    --radius: 0rem;
+
+    --font-sans: 'Inter', sans-serif;
+    --font-display: 'Anton', sans-serif;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body, html {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    cursor: none; /* Hide default cursor */
+  }
+  a, button, [role="button"], input, select, textarea {
+    cursor: none; /* Ensure interactive elements don't show default cursor */
+  }
+}
+
+/* Noise overlay */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9990; /* Below cursor */
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Hide scrollbar for lenis */
+html.lenis {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* 3D Transform utility */
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
