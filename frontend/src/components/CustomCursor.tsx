@@ -17,7 +17,7 @@ export const CustomCursor = () => {
       y: window.innerHeight / 2 
     });
 
-    // Smooth following with slight delay for premium feel
+    // Smooth following with slight delay for natural movement
     const xTo = gsap.quickTo(cursor, 'x', { duration: 0.25, ease: 'power3.out' });
     const yTo = gsap.quickTo(cursor, 'y', { duration: 0.25, ease: 'power3.out' });
 
@@ -76,9 +76,9 @@ export const CustomCursor = () => {
     if (!cursor) return;
 
     let scale = 1;
-    if (cursorState === 'link') scale = 1.1;
-    if (cursorState === 'project') scale = 1.3;
-    if (cursorState === 'tech') scale = 1.15;
+    if (cursorState === 'link') scale = 0.9;
+    if (cursorState === 'project') scale = 1.15;
+    if (cursorState === 'tech') scale = 1.05;
 
     gsap.to(cursor, { 
       scale: scale, 
@@ -90,38 +90,54 @@ export const CustomCursor = () => {
   return (
     <div
       ref={cursorRef}
-      className="fixed top-0 left-0 pointer-events-none flex items-center justify-center rounded-full bg-foreground text-background"
+      className="fixed top-0 left-0 pointer-events-none flex items-center justify-center rounded-full"
       style={{ 
-        width: '70px', 
-        height: '70px', 
+        width: '44px', 
+        height: '44px', 
         zIndex: 99999,
-        border: '1px solid rgba(255, 255, 255, 0.1)', // subtle border for visibility against dark backgrounds
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' // subtle shadow
+        border: '1.5px solid hsl(var(--foreground) / 0.25)', 
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)'
       }}
     >
-      <div className="relative w-full h-full flex items-center justify-center">
-        
-        {/* Default State - Hero */}
-        <div className={`absolute transition-all duration-300 ease-out flex items-center justify-center ${cursorState === 'default' ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
-          <span className="text-xl">✦</span>
-        </div>
-        
-        {/* Link State - Arrow */}
-        <div className={`absolute transition-all duration-300 ease-out flex items-center justify-center ${cursorState === 'link' ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
-          <span className="text-2xl font-bold">↗</span>
-        </div>
+      {/* Default Layer - Soft color / Lens */}
+      <div 
+        className="absolute inset-0 rounded-full backdrop-blur-[2px] transition-opacity duration-500"
+        style={{ 
+          backgroundColor: 'hsl(var(--foreground) / 0.03)',
+          opacity: cursorState === 'default' ? 1 : 0 
+        }} 
+      />
+      
+      {/* Link Layer - Darker soft color */}
+      <div 
+        className="absolute inset-0 rounded-full backdrop-blur-[4px] transition-opacity duration-500"
+        style={{ 
+          backgroundColor: 'hsl(var(--foreground) / 0.12)',
+          opacity: cursorState === 'link' ? 1 : 0 
+        }} 
+      />
 
-        {/* Project State - VIEW Label */}
-        <div className={`absolute transition-all duration-300 ease-out flex items-center justify-center ${cursorState === 'project' ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
-          <span className="font-sans text-[11px] font-bold tracking-[0.2em] uppercase mt-[1px]">View</span>
-        </div>
+      {/* Project Layer - Subtle accent color/texture */}
+      <div 
+        className="absolute inset-0 rounded-full backdrop-blur-[3px] transition-opacity duration-500"
+        style={{ 
+          backgroundColor: 'hsl(var(--accent) / 0.08)',
+          backgroundImage: 'radial-gradient(circle at center, hsl(var(--accent) / 0.15) 0%, transparent 70%)',
+          opacity: cursorState === 'project' ? 1 : 0 
+        }} 
+      />
 
-        {/* Tech State - Tech Symbol */}
-        <div className={`absolute transition-all duration-300 ease-out flex items-center justify-center ${cursorState === 'tech' ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
-          <span className="font-mono text-sm font-bold tracking-widest">01</span>
-        </div>
-        
-      </div>
+      {/* Tech Layer - Technical grid texture */}
+      <div 
+        className="absolute inset-0 rounded-full backdrop-blur-[2px] transition-opacity duration-500"
+        style={{ 
+          backgroundColor: 'hsl(var(--foreground) / 0.04)',
+          backgroundImage: 'linear-gradient(hsl(var(--foreground) / 0.12) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground) / 0.12) 1px, transparent 1px)',
+          backgroundSize: '6px 6px',
+          backgroundPosition: 'center center',
+          opacity: cursorState === 'tech' ? 1 : 0 
+        }} 
+      />
     </div>
   );
 };
