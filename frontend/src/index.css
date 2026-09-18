@@ -6,22 +6,23 @@
 
 @layer base {
   :root {
-    --background: 42 30% 96%; /* Warm ivory / soft paper */
+    /* Using #F3F0E8 for the background which is HSL 43 27% 93% */
+    --background: 43 27% 93%;
     --foreground: 0 0% 12%; /* Dark charcoal / black */
-    --card: 42 30% 96%;
+    --card: 43 27% 93%;
     --card-foreground: 0 0% 12%;
-    --popover: 42 30% 96%;
+    --popover: 43 27% 93%;
     --popover-foreground: 0 0% 12%;
     --primary: 0 0% 12%;
-    --primary-foreground: 42 30% 96%;
-    --secondary: 42 10% 90%;
+    --primary-foreground: 43 27% 93%;
+    --secondary: 43 10% 88%;
     --secondary-foreground: 0 0% 12%;
-    --muted: 42 10% 88%;
+    --muted: 43 10% 86%;
     --muted-foreground: 0 0% 40%;
     --accent: 15 35% 48%; /* Muted rust / terracotta */
-    --accent-foreground: 42 30% 96%;
+    --accent-foreground: 43 27% 93%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 42 30% 96%;
+    --destructive-foreground: 43 27% 93%;
     --border: 0 0% 85%;
     --input: 0 0% 85%;
     --ring: 15 35% 48%;
@@ -43,6 +44,7 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     cursor: none; /* Hide default cursor */
+    background-color: #F3F0E8 !important; /* Force the requested color */
   }
   a, button, [role="button"], input, select, textarea {
     cursor: none; /* Ensure interactive elements don't show default cursor */
