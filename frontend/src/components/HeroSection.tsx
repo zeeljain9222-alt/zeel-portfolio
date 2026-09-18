@@ -43,9 +43,15 @@ export const HeroSection = () => {
         scrub: 1,
         pin: true,
         pinSpacing: false, // Allows next section to overlap smoothly
-        onLeaveBack: () => {
+        onEnterBack: () => {
+          // When scrolling back up into the hero section, force visibility
           gsap.set('.hero-letter-zeel, .hero-letter-jain, .meta-text, .border-line', { clearProps: 'all' });
-          entranceTl.restart();
+          gsap.set('.hero-letter-zeel, .hero-letter-jain, .meta-text, .border-line', { opacity: 1, visibility: 'visible' });
+        },
+        onLeaveBack: () => {
+           // When completely back at the top, optionally restart entrance
+           gsap.set('.hero-letter-zeel, .hero-letter-jain, .meta-text, .border-line', { clearProps: 'all' });
+           entranceTl.restart();
         }
       }
     });
