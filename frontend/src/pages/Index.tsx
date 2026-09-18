@@ -4,7 +4,6 @@ import { CustomCursor } from '@/components/CustomCursor';
 import { HeroSection } from '@/components/HeroSection';
 import { AboutSection } from '@/components/AboutSection';
 import { ProjectsSection } from '@/components/ProjectsSection';
-import { ExperimentalSection } from '@/components/ExperimentalSection';
 import { TechStackSection } from '@/components/TechStackSection';
 import { ContactSection } from '@/components/ContactSection';
 
@@ -46,7 +45,6 @@ export default function Index() {
         <HeroSection />
         <AboutSection />
         <ProjectsSection />
-        <ExperimentalSection />
         <TechStackSection />
         <ContactSection />
       </main>
