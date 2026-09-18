@@ -20,12 +20,17 @@ export const TechStackSection = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       
-      // Rotate the instrument dials
-      gsap.to('.tech-dial', {
-        rotation: 360,
-        duration: 20,
+      // Continuous rotation for instrument dials
+      gsap.to('.tech-dial-1', { rotation: 360, duration: 30, repeat: -1, ease: 'none' });
+      gsap.to('.tech-dial-2', { rotation: -360, duration: 45, repeat: -1, ease: 'none' });
+
+      // Oscillating data tracks
+      gsap.to('.data-track', {
+        xPercent: -50,
+        duration: 10,
         repeat: -1,
-        ease: 'none'
+        yoyo: true,
+        ease: 'sine.inOut'
       });
 
       rowsRef.current.forEach((row, i) => {
@@ -38,8 +43,8 @@ export const TechStackSection = () => {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: row,
-            start: 'top 90%',
-            end: 'top 50%',
+            start: 'top 85%',
+            end: 'top 45%',
             scrub: 1,
           }
         });
@@ -47,11 +52,11 @@ export const TechStackSection = () => {
         // Draw line
         tl.fromTo(line, 
           { scaleX: 0 }, 
-          { scaleX: targetPercent / 100, ease: 'none' },
+          { scaleX: targetPercent / 100, ease: 'power2.out' },
           0
         );
 
-        // Count up number
+        // Scramble count up number
         tl.fromTo(num,
           { innerHTML: 0 },
           { 
@@ -59,8 +64,13 @@ export const TechStackSection = () => {
             snap: { innerHTML: 1 },
             ease: 'none',
             onUpdate: function() {
-              if (num) num.innerHTML = Math.round(this.targets()[0].innerHTML) + '%';
-            }
+              if (num) {
+                // Add slight scramble effect during update
+                const currentVal = Math.round(this.targets()[0].innerHTML);
+                num.innerHTML = currentVal + (Math.random() > 0.8 ? '_' : '');
+              }
+            },
+            onComplete: () => { if (num) num.innerHTML = targetPercent.toString(); }
           },
           0
         );
@@ -72,7 +82,8 @@ export const TechStackSection = () => {
 
       // Parallax for the whole instrument section
       gsap.to(instrumentRef.current, {
-        y: '-10vh',
+        y: '-15vh',
+        rotateZ: 5,
         ease: 'none',
         scrollTrigger: {
           trigger: containerRef.current,
@@ -97,12 +108,12 @@ export const TechStackSection = () => {
       {/* Decorative technical elements / Instrument UI */}
       <div 
         ref={instrumentRef}
-        className="absolute top-0 right-0 w-[50vw] h-[100vh] pointer-events-none opacity-5 flex items-center justify-center"
+        className="absolute top-0 right-0 w-[60vw] h-[100vh] pointer-events-none opacity-5 flex items-center justify-center will-change-transform"
       >
-        <div className="tech-dial absolute w-[40vw] h-[40vw] rounded-full border border-foreground border-dashed" />
-        <div className="tech-dial absolute w-[30vw] h-[30vw] rounded-full border border-foreground" style={{ animationDirection: 'reverse' }} />
-        <div className="absolute w-[2px] h-[50vw] bg-foreground/20 rotate-45" />
-        <div className="absolute w-[50vw] h-[2px] bg-foreground/20 -rotate-45" />
+        <div className="tech-dial-1 absolute w-[50vw] h-[50vw] rounded-full border border-foreground border-dashed" />
+        <div className="tech-dial-2 absolute w-[40vw] h-[40vw] rounded-full border border-foreground" />
+        <div className="absolute w-[1px] h-[60vw] bg-foreground/20 rotate-45" />
+        <div className="absolute w-[60vw] h-[1px] bg-foreground/20 -rotate-45" />
       </div>
 
       <div className="absolute top-12 left-12 font-mono text-[10px] text-foreground/40 uppercase tracking-widest hidden md:block">
@@ -132,9 +143,9 @@ export const TechStackSection = () => {
                 {skill.name}
               </div>
               
-              <div className="flex-grow h-12 relative mx-4 md:mx-8 flex items-center">
-                {/* Background grid line - looks like a data track */}
-                <div className="absolute inset-0 w-full h-full flex items-center">
+              <div className="flex-grow h-12 relative mx-4 md:mx-8 flex items-center overflow-hidden">
+                {/* Background moving data track */}
+                <div className="absolute inset-0 w-[200%] h-full flex items-center data-track">
                   <div className="w-full h-[1px] bg-foreground/10 border-dashed border-b border-foreground/20" />
                 </div>
                 
@@ -150,7 +161,7 @@ export const TechStackSection = () => {
               </div>
 
               <div className="w-24 flex items-baseline justify-end gap-1 shrink-0">
-                <span className="percent-num font-display text-3xl md:text-5xl tracking-tighter text-accent">
+                <span className="percent-num font-display text-3xl md:text-5xl tracking-tighter text-accent font-variant-numeric: tabular-nums">
                   0
                 </span>
                 <span className="font-mono text-xs text-foreground/50 mb-1">%</span>

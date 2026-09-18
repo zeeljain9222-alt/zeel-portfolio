@@ -10,8 +10,8 @@ export const CustomCursor = () => {
     const cursor = cursorRef.current;
     if (!cursor) return;
 
-    const xTo = gsap.quickTo(cursor, 'x', { duration: 0.3, ease: 'power3' });
-    const yTo = gsap.quickTo(cursor, 'y', { duration: 0.3, ease: 'power3' });
+    const xTo = gsap.quickTo(cursor, 'x', { duration: 0.2, ease: 'power3.out' });
+    const yTo = gsap.quickTo(cursor, 'y', { duration: 0.2, ease: 'power3.out' });
 
     const onMouseMove = (e: MouseEvent) => {
       xTo(e.clientX);
@@ -71,13 +71,13 @@ export const CustomCursor = () => {
     if (!cursor) return;
 
     if (cursorState === 'default') {
-      gsap.to(cursor, { width: 32, height: 32, backgroundColor: 'transparent', border: '1px solid var(--foreground)', duration: 0.4, ease: 'back.out(1.5)' });
+      gsap.to(cursor, { width: 48, height: 48, backgroundColor: 'transparent', border: '1px solid var(--foreground)', duration: 0.4, ease: 'power3.out' });
     } else if (cursorState === 'link') {
-      gsap.to(cursor, { width: 48, height: 48, backgroundColor: 'var(--foreground)', border: 'none', duration: 0.4, ease: 'back.out(1.5)' });
+      gsap.to(cursor, { width: 64, height: 64, backgroundColor: 'var(--foreground)', border: 'none', duration: 0.4, ease: 'power3.out' });
     } else if (cursorState === 'project') {
-      gsap.to(cursor, { width: 80, height: 80, backgroundColor: 'var(--foreground)', border: 'none', duration: 0.4, ease: 'back.out(1.5)' });
+      gsap.to(cursor, { width: 96, height: 96, backgroundColor: 'var(--foreground)', border: 'none', duration: 0.4, ease: 'power3.out' });
     } else if (cursorState === 'tech') {
-      gsap.to(cursor, { width: 56, height: 56, backgroundColor: 'transparent', border: '1px dashed var(--accent)', duration: 0.4, ease: 'back.out(1.5)' });
+      gsap.to(cursor, { width: 72, height: 72, backgroundColor: 'transparent', border: '1px dashed var(--accent)', duration: 0.4, ease: 'power3.out' });
     }
   }, [cursorState]);
 
@@ -85,25 +85,25 @@ export const CustomCursor = () => {
     <div
       ref={cursorRef}
       className={`fixed top-0 left-0 pointer-events-none z-[9999] flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 overflow-hidden mix-blend-difference ${isVisible ? 'opacity-100' : 'opacity-0'}`}
-      style={{ transformOrigin: 'center center', width: 32, height: 32, border: '1px solid var(--foreground)', borderRadius: '50%' }}
+      style={{ transformOrigin: 'center center', width: 48, height: 48, border: '1px solid var(--foreground)', borderRadius: '50%' }}
     >
       <div className="relative w-full h-full flex items-center justify-center">
-        {/* Default State */}
-        <div className={`absolute w-1.5 h-1.5 bg-accent rounded-full transition-all duration-300 ${cursorState === 'default' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`} />
+        {/* Default State - Abstract Symbol */}
+        <div className={`absolute w-1.5 h-1.5 bg-foreground rounded-full transition-all duration-300 ${cursorState === 'default' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`} />
         
-        {/* Link State */}
+        {/* Link State - Arrow */}
         <div className={`absolute transition-all duration-300 flex items-center justify-center text-background ${cursorState === 'link' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </div>
 
-        {/* Project State */}
-        <div className={`absolute transition-all duration-300 text-background font-sans text-[10px] font-bold tracking-widest uppercase ${cursorState === 'project' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}>
+        {/* Project State - VIEW */}
+        <div className={`absolute transition-all duration-300 text-background font-sans text-xs font-bold tracking-widest uppercase ${cursorState === 'project' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}>
           View
         </div>
 
-        {/* Tech State */}
+        {/* Tech State - Tech Symbol */}
         <div className={`absolute transition-all duration-300 text-accent ${cursorState === 'tech' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
         </div>
       </div>
     </div>

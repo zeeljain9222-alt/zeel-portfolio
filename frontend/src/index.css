@@ -6,25 +6,25 @@
 
 @layer base {
   :root {
-    --background: 60 15% 95%; /* Warm off-white */
-    --foreground: 0 0% 10%; /* Very dark grey/black */
-    --card: 60 15% 95%;
-    --card-foreground: 0 0% 10%;
-    --popover: 60 15% 95%;
-    --popover-foreground: 0 0% 10%;
-    --primary: 0 0% 10%;
-    --primary-foreground: 60 15% 95%;
-    --secondary: 0 0% 90%;
-    --secondary-foreground: 0 0% 10%;
-    --muted: 60 10% 85%;
-    --muted-foreground: 0 0% 40%;
-    --accent: 15 60% 50%; /* Restrained terracotta/rust */
-    --accent-foreground: 60 15% 95%;
+    --background: 40 20% 96%; /* Warm ivory / soft paper */
+    --foreground: 210 10% 12%; /* Dark charcoal */
+    --card: 40 20% 96%;
+    --card-foreground: 210 10% 12%;
+    --popover: 40 20% 96%;
+    --popover-foreground: 210 10% 12%;
+    --primary: 210 10% 12%;
+    --primary-foreground: 40 20% 96%;
+    --secondary: 40 10% 90%;
+    --secondary-foreground: 210 10% 12%;
+    --muted: 40 10% 88%;
+    --muted-foreground: 210 10% 40%;
+    --accent: 15 40% 45%; /* Muted rust / terracotta */
+    --accent-foreground: 40 20% 96%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 15% 95%;
-    --border: 0 0% 80%;
-    --input: 0 0% 80%;
-    --ring: 15 60% 50%;
+    --destructive-foreground: 40 20% 96%;
+    --border: 210 10% 85%;
+    --input: 210 10% 85%;
+    --ring: 15 40% 45%;
     --radius: 0rem;
 
     --font-sans: 'Inter', sans-serif;
@@ -57,8 +57,8 @@
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 9990; /* Below cursor */
-  opacity: 0.4;
+  z-index: 9990;
+  opacity: 0.35;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
