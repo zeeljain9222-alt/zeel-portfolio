@@ -32,11 +32,6 @@ export const HeroSection = () => {
         { y: '120%', opacity: 0, rotateZ: 8, scale: 0.9 },
         { y: '0%', opacity: 1, rotateZ: 0, scale: 1, duration: 1.2, stagger: 0.04, ease: 'power4.out' },
         '-=1.1'
-      )
-      .fromTo('.hero-accent-shape',
-        { scale: 0, rotation: -90, opacity: 0 },
-        { scale: 1, rotation: 0, opacity: 1, duration: 1.5, ease: 'expo.out' },
-        '-=1.2'
       );
 
     // Scroll Animation
@@ -67,15 +62,24 @@ export const HeroSection = () => {
       ease: 'power2.inOut'
     }, 0);
 
-    scrollTl.to('.meta-text, .border-line, .hero-accent-shape', {
+    scrollTl.to('.meta-text, .border-line', {
       opacity: 0,
       y: -40,
       ease: 'power2.inOut'
     }, 0);
     
+    // Refresh ScrollTrigger when returning to top to fix vanishing elements
+    ScrollTrigger.addEventListener('refresh', () => {
+        if (window.scrollY === 0) {
+            gsap.set('.hero-letter-zeel, .hero-letter-jain, .meta-text, .border-line', { clearProps: 'all' });
+            entranceTl.restart();
+        }
+    });
+
     return () => {
       entranceTl.kill();
       scrollTl.kill();
+      ScrollTrigger.clearEventListeners();
     };
   }, []);
 
@@ -120,11 +124,6 @@ export const HeroSection = () => {
               Creative development & digital design. Focusing on interactive interfaces and modern web architecture.
             </p>
           </div>
-        </div>
-        
-        {/* Subtle Accent Geometric Shape */}
-        <div className="hero-accent-shape absolute right-[15%] top-[25%] w-24 h-24 md:w-40 md:h-40 border-[1px] border-accent/30 bg-accent/5 mix-blend-multiply flex items-center justify-center rounded-full">
-           <div className="w-1 h-1 bg-accent rounded-full" />
         </div>
 
         {/* Asymmetric JAIN */}
