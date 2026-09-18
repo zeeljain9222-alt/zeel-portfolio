@@ -44,9 +44,11 @@ export const ProjectsSection = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const panels = panelsRef.current;
-      if (!panels.length) return;
+      if (!panels.length || !containerRef.current) return;
 
-      // Pin the main container
+      // Ensure all panels are correctly positioned absolutely
+      gsap.set(panels, { zIndex: (i) => i });
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
@@ -57,41 +59,45 @@ export const ProjectsSection = () => {
         }
       });
 
-      // Cinematic transitions for each panel
       panels.forEach((panel, i) => {
-        if (i === 0) return; // First panel is already visible
+        if (i === 0) {
+          // Panel 0 fades out slightly as Panel 1 comes in
+          tl.to(panel, { opacity: 0.2, scale: 0.95, ease: 'none' }, 0);
+          return;
+        }
 
         const img = panel?.querySelector('.project-img');
-        const title = panel?.querySelector('.project-title');
+        const content = panel?.querySelector('.project-meta');
         const num = panel?.querySelector('.project-num');
-        const meta = panel?.querySelector('.project-meta');
 
-        // Different entry animations based on index to make it feel experimental
-        if (i % 3 === 1) {
-          // Slide up from bottom with scale
-          tl.fromTo(panel, 
-            { yPercent: 100, scale: 0.8 }, 
-            { yPercent: 0, scale: 1, ease: 'power2.inOut' }
-          );
-        } else if (i % 3 === 2) {
+        // Different entrance animations for variety
+        if (i === 1) {
+          // Slide up from bottom
+          tl.fromTo(panel, { yPercent: 100 }, { yPercent: 0, ease: 'none' }, '+=0');
+          tl.fromTo(img, { scale: 1.5 }, { scale: 1, ease: 'power2.out' }, '<');
+          tl.fromTo(content, { y: 50, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }, '<0.2');
+        } else if (i === 2) {
           // Clip path reveal from center
           tl.fromTo(panel, 
             { clipPath: 'circle(0% at 50% 50%)' }, 
-            { clipPath: 'circle(150% at 50% 50%)', ease: 'power2.inOut' }
+            { clipPath: 'circle(150% at 50% 50%)', ease: 'none' },
+            '+=0'
           );
-        } else {
-          // Slide from right with rotation
-          tl.fromTo(panel, 
-            { xPercent: 100, rotation: 5 }, 
-            { xPercent: 0, rotation: 0, ease: 'power2.inOut' }
-          );
+          tl.fromTo(num, { rotation: -45, scale: 0.5 }, { rotation: 0, scale: 1, ease: 'power2.out' }, '<');
+        } else if (i === 3) {
+          // Slide from right
+          tl.fromTo(panel, { xPercent: 100 }, { xPercent: 0, ease: 'none' }, '+=0');
+          tl.fromTo(img, { xPercent: -50 }, { xPercent: 0, ease: 'power2.out' }, '<');
+        } else if (i === 4) {
+          // Scale up from center
+          tl.fromTo(panel, { scale: 0, opacity: 0, borderRadius: '100%' }, { scale: 1, opacity: 1, borderRadius: '0%', ease: 'none' }, '+=0');
+          tl.fromTo(content, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, ease: 'power2.out' }, '<0.2');
         }
 
-        // Inner parallax animations for content
-        tl.fromTo(img, { scale: 1.5 }, { scale: 1, ease: 'power2.out' }, '<');
-        tl.fromTo(title, { x: 100, opacity: 0 }, { x: 0, opacity: 1, ease: 'power2.out' }, '<0.2');
-        tl.fromTo(num, { y: -100, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }, '<0.1');
-        tl.fromTo(meta, { opacity: 0 }, { opacity: 1, ease: 'power2.out' }, '<0.3');
+        // As the next panel comes in, fade out the current one
+        if (i < panels.length - 1) {
+          tl.to(panel, { opacity: 0.2, scale: 0.95, ease: 'none' }, '+=0');
+        }
       });
 
     }, containerRef);
@@ -106,25 +112,23 @@ export const ProjectsSection = () => {
           key={project.num}
           ref={el => panelsRef.current[i] = el}
           className="absolute inset-0 w-full h-full flex items-center justify-center p-6 md:p-12 bg-background will-change-transform"
-          style={{ zIndex: i }}
         >
           {/* Huge background number */}
-          <div className="project-num absolute top-[-10vh] left-[-5vw] font-display text-[40vw] leading-none text-foreground/5 pointer-events-none select-none">
+          <div className="project-num absolute top-[-5vh] left-[-2vw] font-display text-[35vw] leading-none text-foreground/[0.03] pointer-events-none select-none">
             {project.num}
           </div>
 
-          <div className="relative w-full max-w-7xl h-[70vh] flex flex-col md:flex-row items-center gap-12 z-10">
+          <div className="relative w-full max-w-7xl h-[75vh] flex flex-col md:flex-row items-center gap-12 z-10">
             
             {/* Project Image Placeholder */}
             <div 
-              className="relative w-full md:w-2/3 h-full overflow-hidden bg-foreground/10 group cursor-none"
-              data-cursor-text="VIEW PROJECT &rarr;"
+              className="relative w-full md:w-2/3 h-full overflow-hidden bg-foreground/5 group cursor-none"
+              data-cursor-type="project"
             >
-              <div className="project-img absolute inset-0 w-full h-full bg-foreground/5 scale-110 transition-transform duration-1000 group-hover:scale-100 origin-center flex items-center justify-center">
-                <span className="text-foreground/20 font-sans tracking-widest text-sm uppercase">Placeholder Image</span>
+              <div className="project-img absolute inset-0 w-full h-full bg-foreground/10 scale-110 transition-transform duration-1000 group-hover:scale-100 origin-center flex items-center justify-center">
+                <span className="text-foreground/30 font-sans tracking-widest text-sm uppercase">Project Preview</span>
               </div>
-              {/* Animated borders */}
-              <div className="absolute inset-0 border border-foreground/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none m-4" />
+              <div className="absolute inset-0 border border-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none m-4" />
             </div>
 
             {/* Project Details */}
@@ -134,12 +138,12 @@ export const ProjectsSection = () => {
                 <div className="h-[1px] w-12 bg-foreground/30" />
               </div>
               
-              <h2 className="project-title font-display text-5xl md:text-7xl uppercase tracking-tighter leading-[0.9] mb-8 whitespace-pre-line">
+              <h2 className="font-display text-5xl md:text-6xl lg:text-7xl uppercase tracking-tighter leading-[0.9] mb-8 whitespace-pre-line">
                 {project.title}
               </h2>
               
-              <div className="flex flex-col gap-2 mb-8">
-                <span className="font-sans text-xs font-bold uppercase tracking-widest text-foreground/50">Technology</span>
+              <div className="flex flex-col gap-2 mb-8 border-l-2 border-accent pl-4">
+                <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-foreground/50">Technology</span>
                 <span className="font-sans text-sm font-medium uppercase tracking-wider">{project.tech}</span>
               </div>
 
@@ -147,8 +151,8 @@ export const ProjectsSection = () => {
                 {project.desc}
               </p>
 
-              <button className="self-start text-xs font-bold uppercase tracking-widest border-b border-foreground pb-1 hover:text-accent hover:border-accent transition-colors">
-                View Project &rarr;
+              <button data-cursor-type="link" className="self-start text-xs font-bold uppercase tracking-widest border-b border-foreground pb-1 hover:text-accent hover:border-accent transition-colors">
+                Explore Project &rarr;
               </button>
             </div>
             

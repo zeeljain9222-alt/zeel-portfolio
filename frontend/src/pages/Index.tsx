@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import Lenis from 'lenis';
 import { CustomCursor } from '@/components/CustomCursor';
-import { ScrollProgress } from '@/components/ScrollProgress';
 import { HeroSection } from '@/components/HeroSection';
 import { AboutSection } from '@/components/AboutSection';
 import { ProjectsSection } from '@/components/ProjectsSection';
+import { ExperimentalSection } from '@/components/ExperimentalSection';
 import { TechStackSection } from '@/components/TechStackSection';
 import { ContactSection } from '@/components/ContactSection';
 
@@ -39,13 +39,13 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-accent selection:text-background">
       <CustomCursor />
-      <ScrollProgress />
       <div className="noise-overlay" />
       
       <main className="w-full overflow-hidden flex flex-col">
         <HeroSection />
         <AboutSection />
         <ProjectsSection />
+        <ExperimentalSection />
         <TechStackSection />
         <ContactSection />
       </main>

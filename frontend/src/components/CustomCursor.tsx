@@ -3,17 +3,15 @@ import gsap from 'gsap';
 
 export const CustomCursor = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
+  const [cursorState, setCursorState] = useState<'default' | 'link' | 'project' | 'tech'>('default');
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const cursor = cursorRef.current;
-    const text = textRef.current;
-    if (!cursor || !text) return;
+    if (!cursor) return;
 
-    // QuickTo for smooth tracking
-    const xTo = gsap.quickTo(cursor, 'x', { duration: 0.4, ease: 'power3' });
-    const yTo = gsap.quickTo(cursor, 'y', { duration: 0.4, ease: 'power3' });
+    const xTo = gsap.quickTo(cursor, 'x', { duration: 0.3, ease: 'power3' });
+    const yTo = gsap.quickTo(cursor, 'y', { duration: 0.3, ease: 'power3' });
 
     const onMouseMove = (e: MouseEvent) => {
       xTo(e.clientX);
@@ -26,98 +24,88 @@ export const CustomCursor = () => {
 
     const onHoverEnter = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      const cursorText = target.closest('[data-cursor-text]')?.getAttribute('data-cursor-text');
       
-      if (cursorText) {
-        text.innerHTML = cursorText;
-        gsap.to(cursor, {
-          scale: 4,
-          backgroundColor: 'var(--foreground)',
-          color: 'var(--background)',
-          mixBlendMode: 'normal',
-          duration: 0.4,
-          ease: 'back.out(1.5)'
-        });
-        gsap.to(text, { opacity: 1, scale: 0.25, duration: 0.3 }); // scale text down to counteract cursor scale
-      } else {
-        gsap.to(cursor, {
-          scale: 2,
-          backgroundColor: 'transparent',
-          border: '1px solid var(--foreground)',
-          duration: 0.4,
-          ease: 'back.out(1.5)'
-        });
+      if (target.closest('[data-cursor-type="project"]')) {
+        setCursorState('project');
+      } else if (target.closest('[data-cursor-type="tech"]')) {
+        setCursorState('tech');
+      } else if (target.closest('a, button, [data-cursor-type="link"]')) {
+        setCursorState('link');
       }
     };
 
     const onHoverLeave = () => {
-      gsap.to(cursor, {
-        scale: 1,
-        backgroundColor: 'var(--foreground)',
-        border: 'none',
-        mixBlendMode: 'difference',
-        duration: 0.4,
-        ease: 'power3.out'
-      });
-      gsap.to(text, { opacity: 0, duration: 0.2 });
-      text.innerHTML = '';
+      setCursorState('default');
     };
 
     window.addEventListener('mousemove', onMouseMove);
     document.body.addEventListener('mouseleave', onMouseLeave);
     document.body.addEventListener('mouseenter', onMouseEnter);
 
-    // Attach to interactive elements
-    const interactiveElements = document.querySelectorAll('a, button, [data-cursor], [data-cursor-text]');
-    interactiveElements.forEach(el => {
-      el.addEventListener('mouseenter', onHoverEnter as EventListener);
-      el.addEventListener('mouseleave', onHoverLeave);
-    });
-
-    // Observer for dynamically added elements
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === 1) {
-            const el = node as HTMLElement;
-            const interactives = el.querySelectorAll?.('a, button, [data-cursor], [data-cursor-text]');
-            interactives?.forEach(intEl => {
-              intEl.addEventListener('mouseenter', onHoverEnter as EventListener);
-              intEl.addEventListener('mouseleave', onHoverLeave);
-            });
-            if (el.matches?.('a, button, [data-cursor], [data-cursor-text]')) {
-              el.addEventListener('mouseenter', onHoverEnter as EventListener);
-              el.addEventListener('mouseleave', onHoverLeave);
-            }
-          }
-        });
+    const attachListeners = () => {
+      const interactives = document.querySelectorAll('a, button, [data-cursor-type]');
+      interactives.forEach(el => {
+        el.addEventListener('mouseenter', onHoverEnter as EventListener);
+        el.addEventListener('mouseleave', onHoverLeave);
       });
-    });
+    };
 
+    attachListeners();
+
+    const observer = new MutationObserver(() => {
+      attachListeners();
+    });
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
       document.body.removeEventListener('mouseleave', onMouseLeave);
       document.body.removeEventListener('mouseenter', onMouseEnter);
-      interactiveElements.forEach(el => {
-        el.removeEventListener('mouseenter', onHoverEnter as EventListener);
-        el.removeEventListener('mouseleave', onHoverLeave);
-      });
       observer.disconnect();
     };
   }, [isVisible]);
 
+  // Handle GSAP animations for cursor state changes
+  useEffect(() => {
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+
+    if (cursorState === 'default') {
+      gsap.to(cursor, { width: 32, height: 32, backgroundColor: 'transparent', border: '1px solid var(--foreground)', duration: 0.4, ease: 'back.out(1.5)' });
+    } else if (cursorState === 'link') {
+      gsap.to(cursor, { width: 48, height: 48, backgroundColor: 'var(--foreground)', border: 'none', duration: 0.4, ease: 'back.out(1.5)' });
+    } else if (cursorState === 'project') {
+      gsap.to(cursor, { width: 80, height: 80, backgroundColor: 'var(--foreground)', border: 'none', duration: 0.4, ease: 'back.out(1.5)' });
+    } else if (cursorState === 'tech') {
+      gsap.to(cursor, { width: 56, height: 56, backgroundColor: 'transparent', border: '1px dashed var(--accent)', duration: 0.4, ease: 'back.out(1.5)' });
+    }
+  }, [cursorState]);
+
   return (
     <div
       ref={cursorRef}
-      className={`fixed top-0 left-0 w-4 h-4 bg-foreground rounded-full pointer-events-none z-[9999] flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 mix-blend-difference transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
-      style={{ transformOrigin: 'center center' }}
+      className={`fixed top-0 left-0 pointer-events-none z-[9999] flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 overflow-hidden mix-blend-difference ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+      style={{ transformOrigin: 'center center', width: 32, height: 32, border: '1px solid var(--foreground)', borderRadius: '50%' }}
     >
-      <div 
-        ref={textRef} 
-        className="opacity-0 font-sans text-[8px] font-bold tracking-widest text-background whitespace-nowrap text-center uppercase"
-      />
+      <div className="relative w-full h-full flex items-center justify-center">
+        {/* Default State */}
+        <div className={`absolute w-1.5 h-1.5 bg-accent rounded-full transition-all duration-300 ${cursorState === 'default' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`} />
+        
+        {/* Link State */}
+        <div className={`absolute transition-all duration-300 flex items-center justify-center text-background ${cursorState === 'link' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </div>
+
+        {/* Project State */}
+        <div className={`absolute transition-all duration-300 text-background font-sans text-[10px] font-bold tracking-widest uppercase ${cursorState === 'project' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}>
+          View
+        </div>
+
+        {/* Tech State */}
+        <div className={`absolute transition-all duration-300 text-accent ${cursorState === 'tech' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+        </div>
+      </div>
     </div>
   );
 };
