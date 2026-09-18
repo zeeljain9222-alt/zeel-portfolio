@@ -44,10 +44,10 @@ export const HeroSection = () => {
       scrollTrigger: {
         trigger: containerRef.current,
         start: 'top top',
-        end: 'bottom top',
+        end: '+=100%',
         scrub: 1,
         pin: true,
-        pinSpacing: true,
+        pinSpacing: false, // Set to false so the next section immediately scrolls over this one
       }
     });
 
@@ -82,7 +82,7 @@ export const HeroSection = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative w-full h-screen flex flex-col justify-between p-6 md:p-12 overflow-hidden bg-background">
+    <section ref={containerRef} className="relative w-full h-screen flex flex-col justify-between p-6 md:p-12 overflow-hidden bg-background z-0">
       
       {/* Decorative Line */}
       <div ref={lineRef} className="absolute top-1/2 left-12 right-12 h-[1px] bg-foreground/10 -translate-y-1/2 z-0" />

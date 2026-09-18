@@ -14,7 +14,7 @@ export default function Index() {
     document.documentElement.style.cursor = 'none';
     
     const lenis = new Lenis({
-      duration: 1.5,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
@@ -41,7 +41,8 @@ export default function Index() {
       <CustomCursor />
       <div className="noise-overlay" />
       
-      <main className="w-full overflow-hidden flex flex-col">
+      {/* Removed overflow-hidden and flex-col to fix GSAP pin-spacer shrinking issues */}
+      <main className="w-full block">
         <HeroSection />
         <AboutSection />
         <ProjectsSection />

@@ -15,8 +15,8 @@ export const AboutSection = () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
-          start: 'top 70%',
-          end: 'bottom 30%',
+          start: 'top 85%',
+          end: 'bottom 15%',
           scrub: 1,
         }
       });
@@ -57,7 +57,7 @@ export const AboutSection = () => {
 
       // Grid parallax
       tl.to(gridRef.current, {
-        y: '20vh',
+        y: '10vh',
         ease: 'none'
       }, 0);
 
@@ -67,7 +67,7 @@ export const AboutSection = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative min-h-screen w-full flex flex-col justify-center px-6 md:px-24 py-32 overflow-hidden bg-background perspective-[1000px]">
+    <section ref={containerRef} className="relative z-10 w-full flex flex-col justify-center px-6 md:px-24 py-24 md:py-32 overflow-hidden bg-background perspective-[1000px]">
       
       {/* Subtle animated grid background */}
       <div 
@@ -76,12 +76,12 @@ export const AboutSection = () => {
         style={{
           backgroundImage: 'linear-gradient(var(--foreground) 1px, transparent 1px), linear-gradient(90deg, var(--foreground) 1px, transparent 1px)',
           backgroundSize: '4rem 4rem',
-          height: '150vh',
-          top: '-25vh'
+          height: '150%',
+          top: '-25%'
         }}
       />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row gap-16 md:gap-32 items-center">
+      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-24 items-center">
         
         <div className="flex-1 flex flex-col perspective-[1000px]">
           {['I BUILD', 'SOFTWARE', 'AND DIGITAL', 'EXPERIENCES.'].map((line, i) => (

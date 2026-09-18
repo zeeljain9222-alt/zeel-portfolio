@@ -63,7 +63,7 @@ export const ProjectsSection = () => {
 
       // Parallax effects inside each project
       const panels = gsap.utils.toArray('.project-panel');
-      panels.forEach((panel: any, i) => {
+      panels.forEach((panel: any) => {
         const img = panel.querySelector('.project-img-inner');
         const title = panel.querySelector('.project-title');
         const num = panel.querySelector('.project-num');
@@ -123,7 +123,7 @@ export const ProjectsSection = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative w-full h-screen overflow-hidden bg-background">
+    <section ref={containerRef} className="relative z-20 w-full h-screen overflow-hidden bg-background">
       
       {/* Horizontal Track */}
       <div 
@@ -131,7 +131,7 @@ export const ProjectsSection = () => {
         className="flex h-full will-change-transform"
         style={{ width: `${projects.length * 100}vw` }}
       >
-        {projects.map((project, i) => (
+        {projects.map((project) => (
           <div 
             key={project.num}
             className="project-panel relative w-screen h-full flex items-center justify-center p-6 md:p-12"

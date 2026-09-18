@@ -6,7 +6,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 export const ExperimentalSection = () => {
   const containerRef = useRef<HTMLElement>(null);
-  const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -45,7 +44,7 @@ export const ExperimentalSection = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative w-full h-screen bg-background overflow-hidden flex items-center justify-center">
+    <section ref={containerRef} className="relative z-30 w-full h-screen bg-background overflow-hidden flex items-center justify-center">
       
       {/* Grid Background */}
       <div 
