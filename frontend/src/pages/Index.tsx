@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Lenis from 'lenis';
+import { setLenis } from '@/lib/lenis';
 import { HeroSection } from '@/components/HeroSection';
 import { AboutSection } from '@/components/AboutSection';
 import { ProjectsSection } from '@/components/ProjectsSection';
@@ -25,7 +26,10 @@ export default function Index() {
 
     requestAnimationFrame(raf);
 
+    setLenis(lenis);
+
     return () => {
+      setLenis(null);
       lenis.destroy();
     };
   }, []);

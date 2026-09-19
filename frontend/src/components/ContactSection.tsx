@@ -53,12 +53,14 @@ export const ContactSection = () => {
     );
 
     return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
+      tl.scrollTrigger?.kill();
+      tl.kill();
     };
   }, []);
 
   return (
     <section 
+      id="contact"
       ref={sectionRef} 
       className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-background py-32 perspective-[1000px]"
     >

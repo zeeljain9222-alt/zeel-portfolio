@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-static/
+build/
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
+# Env files (secrets are managed via Freebuff settings)
+.env
+.env.local
+.env.*.local
+
+# Editor / OS
+.DS_Store
+*.log

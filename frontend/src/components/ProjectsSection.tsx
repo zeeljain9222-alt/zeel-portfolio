@@ -123,7 +123,7 @@ export const ProjectsSection = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative z-20 w-full h-screen overflow-hidden bg-background">
+    <section id="projects" ref={containerRef} className="relative z-20 w-full h-screen overflow-hidden bg-background">
       
       {/* Horizontal Track */}
       <div 

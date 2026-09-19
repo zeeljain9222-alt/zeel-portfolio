@@ -73,6 +73,7 @@ export const TechStackSection = () => {
 
   return (
     <section 
+      id="skills"
       ref={containerRef} 
       className="relative min-h-[120vh] w-full bg-background text-foreground overflow-hidden flex items-center justify-center perspective-[2000px]"
       data-cursor-type="tech"

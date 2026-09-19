@@ -60,7 +60,7 @@ export const AboutSection = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative z-10 w-full flex flex-col justify-center px-6 md:px-24 py-24 md:py-32 overflow-hidden bg-transparent perspective-[1000px]">
+    <section id="about" ref={containerRef} className="relative z-10 w-full flex flex-col justify-center px-6 md:px-24 py-24 md:py-32 overflow-hidden bg-transparent perspective-[1000px]">
       
       <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-24 items-center">
         
@@ -68,7 +68,7 @@ export const AboutSection = () => {
           {['I BUILD', 'SOFTWARE', 'AND DIGITAL', 'EXPERIENCES.'].map((line, i) => (
             <div 
               key={i} 
-              ref={el => textRefs.current[i] = el}
+              ref={el => { textRefs.current[i] = el; }}
               className="font-display text-[11vw] md:text-[7vw] leading-[0.9] tracking-tight uppercase will-change-transform transform-style-3d text-foreground font-bold"
             >
               {line}
