@@ -41,14 +41,14 @@ describe("HeroSection", () => {
 
   it("renders the site nav with all sections", () => {
     render(<HeroSection />);
-    for (const label of ["Home", "Projects", "Skills", "About", "Contact"]) {
+    for (const label of ["Work", "Skills", "About", "Contact"]) {
       expect(screen.getAllByRole("link", { name: label }).length).toBeGreaterThan(0);
     }
   });
 
-  it("renders the photo placeholder polaroid", () => {
+  it("renders the portrait area", () => {
     render(<HeroSection />);
-    expect(screen.getByText(/PHOTO HERE/i)).toBeInTheDocument();
+    expect(screen.getByText(/Portrait/i)).toBeInTheDocument();
   });
 
   it("smooth-scrolls to a section via lenis on nav click", async () => {
@@ -58,16 +58,16 @@ describe("HeroSection", () => {
 
     render(
       <div>
-        <div id="projects" />
+        <div id="build" />
         <HeroSection />
       </div>
     );
 
-    await user.click(screen.getByRole("link", { name: "Projects" }));
+    await user.click(screen.getByRole("link", { name: "Work" }));
 
     expect(lenis.scrollTo).toHaveBeenCalledTimes(1);
     expect(lenis.scrollTo).toHaveBeenCalledWith(
-      document.querySelector("#projects"),
+      document.querySelector("#build"),
       expect.objectContaining({ duration: 1.4 })
     );
   });
@@ -76,7 +76,7 @@ describe("HeroSection", () => {
     const user = userEvent.setup();
     render(
       <div>
-        <div id="skills" />
+        <div id="learn" />
         <HeroSection />
       </div>
     );

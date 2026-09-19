@@ -51,9 +51,7 @@ export default {
       fontFamily: {
         sans: ['var(--font-sans)'],
         display: ['var(--font-display)'],
-        serifdisplay: ['var(--font-serif-display)'],
-        hand: ['var(--font-hand)'],
-        handalt: ['var(--font-hand-alt)'],
+        black: ['var(--font-black)'],
       },
     },
   },

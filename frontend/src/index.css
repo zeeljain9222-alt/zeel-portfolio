@@ -2,43 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,900&family=Caveat:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Kalam:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Black&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    /* Scrapbook off-white paper */
-    --background: 38 35% 93%;
-    --foreground: 30 10% 12%;
+    /* Premium minimal: warm off-white paper + near-black ink + single coral accent */
+    --background: 42 30% 96%;
+    --foreground: 20 12% 8%;
 
-    --card: 40 33% 98%;
-    --card-foreground: 30 10% 12%;
-    --popover: 40 33% 98%;
-    --popover-foreground: 30 10% 12%;
-    --primary: 30 10% 12%;
-    --primary-foreground: 38 35% 93%;
-    --secondary: 36 25% 86%;
-    --secondary-foreground: 30 10% 12%;
-    --muted: 36 25% 85%;
-    --muted-foreground: 29 10% 40%;
-    /* Muted coral / terracotta */
-    --accent: 12 53% 53%;
-    --accent-foreground: 38 35% 93%;
+    --card: 42 30% 98%;
+    --card-foreground: 20 12% 8%;
+    --popover: 42 30% 98%;
+    --popover-foreground: 20 12% 8%;
+    --primary: 20 12% 8%;
+    --primary-foreground: 42 30% 96%;
+    --secondary: 38 18% 90%;
+    --secondary-foreground: 20 12% 8%;
+    --muted: 38 18% 90%;
+    --muted-foreground: 25 8% 42%;
+    /* Single accent: muted coral / terracotta */
+    --accent: 13 62% 52%;
+    --accent-foreground: 42 30% 96%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 38 35% 93%;
-    --border: 30 12% 80%;
-    --input: 30 12% 80%;
-    --ring: 12 53% 53%;
+    --destructive-foreground: 42 30% 96%;
+    --border: 30 12% 84%;
+    --input: 30 12% 84%;
+    --ring: 13 62% 52%;
     --radius: 0rem;
 
-    --font-sans: 'Space Grotesk', 'Inter', sans-serif;
-    --font-display: 'Archivo Black', sans-serif;
-    --font-serif-display: 'Playfair Display', serif;
-    --font-hand: 'Caveat', cursive;
-    --font-hand-alt: 'Kalam', cursive;
+    --font-sans: 'Inter', sans-serif;
+    --font-display: 'Archivo', sans-serif;
+    --font-black: 'Archivo Black', sans-serif;
 
-    --ink: 30 10% 12%;
-    --coral: 12 53% 53%;
-    --coral-soft: 12 45% 66%;
+    --ink: 20 12% 8%;
+    --coral: 13 62% 52%;
   }
 }
 
@@ -54,69 +51,97 @@
     overflow-x: hidden;
     background-color: hsl(var(--background)) !important;
   }
+  ::selection {
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
 }
 
-/* Scrapbook paper texture + torn white edges (from reference) */
-.scrap-bg {
-  position: relative;
-  background-color: hsl(38 35% 93%);
-  background-image:
-    radial-gradient(ellipse 42% 55% at 12% 20%, hsl(30 12% 78% / 0.28), transparent 70%),
-    radial-gradient(ellipse 38% 50% at 55% 78%, hsl(30 12% 76% / 0.30), transparent 72%),
-    radial-gradient(ellipse 45% 60% at 92% 25%, hsl(30 12% 77% / 0.28), transparent 70%),
-    radial-gradient(ellipse 36% 48% at 85% 88%, hsl(30 12% 78% / 0.24), transparent 70%),
-    radial-gradient(ellipse 60% 60% at 50% 45%, hsl(30 18% 82% / 0.14), transparent 75%),
-    linear-gradient(160deg, #f6f2e9 0%, #f0ebdf 45%, #eee8db 100%);
+/* ---------- Typography helpers ---------- */
+.font-black-display {
+  font-family: var(--font-black);
+  font-weight: 400;
+  letter-spacing: -0.02em;
 }
-.scrap-bg::before {
-  content: "";
-  position: absolute;
+.act-word {
+  font-family: var(--font-black);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+
+/* ---------- Custom cursor ---------- */
+@media (pointer: fine) {
+  .cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: hsl(var(--foreground));
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: normal;
+  }
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    border: 1px solid hsl(var(--foreground) / 0.35);
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+  }
+  .cursor-ring.is-active {
+    width: 64px;
+    height: 64px;
+    border-color: hsl(var(--accent) / 0.9);
+  }
+}
+
+/* Fine ruled paper grid — barely there texture */
+.paper-grid {
+  position: fixed;
   inset: 0;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
   z-index: 1;
+  background-image:
+    linear-gradient(to right, hsl(20 12% 8% / 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(20 12% 8% / 0.03) 1px, transparent 1px);
+  background-size: 72px 72px;
 }
 
-/* Hand-drawn charcoal smudge under illustrations */
-.charcoal-smudge::after {
-  content: "";
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: -3%;
-  height: 9%;
-  background: radial-gradient(ellipse at center, hsl(30 10% 12% / 0.20), transparent 70%);
-  filter: blur(2px);
-  z-index: -1;
+/* Edge fade used between acts */
+.act-fade {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
 }
 
-/* Washi tape strip */
-.tape {
-  background: hsl(12 45% 66% / 0.38);
-  -webkit-backdrop-filter: blur(1px);
-  backdrop-filter: blur(1px);
-  box-shadow: 0 1px 3px hsl(30 10% 12% / 0.10);
-}
-
-.tape-ink {
-  background: hsl(30 10% 12% / 0.10);
-  -webkit-backdrop-filter: blur(1px);
-  backdrop-filter: blur(1px);
-  box-shadow: 0 1px 3px hsl(30 10% 12% / 0.10);
-}
-
-/* Squiggly hand-drawn underlines */
-.squiggle {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='6' viewBox='0 0 120 6'%3E%3Cpath d='M1,3 q5,-2.5 10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0' fill='none' stroke='%23b9563d' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: repeat-x;
-  background-position: 0 100%;
-  background-size: 120px 6px;
-  padding-bottom: 9px;
+/* Hairline rules */
+.hairline {
+  height: 1px;
+  background: hsl(20 12% 8% / 0.12);
 }
 
 /* 3D Transform utility */
 .transform-style-3d {
   transform-style: preserve-3d;
+}
+
+/* Tilt card sheen */
+.tilt-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.tilt-inner {
+  transform: translateZ(28px);
 }
 
 /* Hide scrollbar for lenis */

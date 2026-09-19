@@ -1,146 +1,124 @@
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ActHeader } from "./ActHeader";
+import { velocitySkew } from "@/lib/motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const SKILL_ROWS = [
+  { items: ["JAVA", "C", "PYTHON"], note: "Core languages" },
+  { items: ["HTML", "CSS", "JAVASCRIPT"], note: "Web fundamentals" },
+  { items: ["REACT", "TAILWIND", "AWS"], note: "Modern stack" },
+  { items: ["SQL", "RDBMS", "OOP"], note: "Data & systems" },
+];
+
+/**
+ * LEARN act: oversized kinetic type rows, each drifting horizontally
+ * at a different rate and direction; skews with scroll velocity.
+ */
 export const TechStackSection = () => {
   const containerRef = useRef<HTMLElement>(null);
-  const scrollWrapperRef = useRef<HTMLDivElement>(null);
-  const mouseWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     const ctx = gsap.context(() => {
-      if (!containerRef.current || !scrollWrapperRef.current || !mouseWrapperRef.current) return;
+      // Infinite drift per row (CSS-independent so scrub/velocity stay in sync)
+      const rows = gsap.utils.toArray<HTMLElement>(".skill-track");
+      rows.forEach((row, i) => {
+        const direction = i % 2 === 0 ? -1 : 1;
+        const distance = row.scrollWidth / 2; // track holds content duplicated once
+        if (reduced) return;
 
-      // Scroll-driven 3D rotation of the entire installation
-      gsap.fromTo(scrollWrapperRef.current,
-        { rotateX: 15, rotateY: -15 },
-        {
-          rotateX: -15,
-          rotateY: 15,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1
-          }
-        }
-      );
-
-      // Parallax depth for individual technical elements
-      gsap.utils.toArray('.tech-element').forEach((el: any) => {
-        const depth = parseFloat(el.dataset.depth || '0');
-        
-        gsap.fromTo(el,
-          { z: depth * -100, scale: 1 - (depth * 0.1) },
+        gsap.fromTo(
+          row,
+          { x: direction > 0 ? -distance : 0 },
           {
-            z: depth * 150,
-            scale: 1 + (depth * 0.15),
-            ease: 'none',
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 1
-            }
+            x: direction > 0 ? 0 : -distance,
+            duration: 26 + i * 6,
+            ease: "none",
+            repeat: -1,
+            modifiers: {
+              x: (x) => `${parseFloat(x) % distance}px`,
+            },
+          }
+        );
+
+        // Scroll-linked boost: rows shift with scroll for depth
+        gsap.to(row, {
+          xPercent: direction * 6,
+          ease: "none",
+          scrollTrigger: { trigger: containerRef.current, start: "top bottom", end: "bottom top", scrub: 1 },
+        });
+      });
+
+      // Row entrance: clip-reveal from center outward
+      gsap.utils.toArray<HTMLElement>(".skill-row").forEach((row, i) => {
+        gsap.fromTo(
+          row,
+          { opacity: 0, scaleX: 0.85 },
+          {
+            opacity: 1,
+            scaleX: 1,
+            duration: 0.9,
+            ease: "expo.out",
+            scrollTrigger: { trigger: row, start: "top 88%" },
+            delay: i * 0.04,
           }
         );
       });
 
-      // Mouse-driven 3D micro-interaction for extra kinetic feel
-      const xTo = gsap.quickTo(mouseWrapperRef.current, "rotationY", { duration: 1.5, ease: "power3.out" });
-      const yTo = gsap.quickTo(mouseWrapperRef.current, "rotationX", { duration: 1.5, ease: "power3.out" });
-
-      const handleMouseMove = (e: MouseEvent) => {
-        const x = (e.clientX / window.innerWidth - 0.5) * 20; // -10 to 10 degrees
-        const y = (e.clientY / window.innerHeight - 0.5) * -20; // -10 to 10 degrees
-        xTo(x);
-        yTo(y);
-      };
-
-      window.addEventListener('mousemove', handleMouseMove);
-
-      return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-      };
-
+      if (!reduced) {
+        const word = containerRef.current?.querySelector<HTMLElement>(".act-word");
+        if (word) velocitySkew(word, 5);
+      }
     }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section 
-      id="skills"
-      ref={containerRef} 
-      className="relative min-h-[120vh] w-full bg-background text-foreground overflow-hidden flex items-center justify-center perspective-[2000px]"
-      data-cursor-type="tech"
-    >
-      
-      {/* Global Background Grid */}
-      <div className="absolute inset-0 pointer-events-none opacity-5" style={{ backgroundImage: 'linear-gradient(var(--foreground) 1px, transparent 1px), linear-gradient(90deg, var(--foreground) 1px, transparent 1px)', backgroundSize: '100px 100px' }} />
+    <section id="learn" ref={containerRef} className="relative w-full overflow-hidden py-28 md:py-36">
+      <ActHeader
+        word="LEARN"
+        kicker="02 / Skills"
+        sub="Tools I think in — sharpened course by course, project by project."
+        tone="accent"
+        bleed={false}
+      />
 
-      {/* Top/Bottom Metadata */}
-      <div className="absolute top-12 left-12 font-mono text-[10px] text-muted-foreground uppercase tracking-widest hidden md:block z-50">
-        SYS.REQ. // V.4.0.0<br/>
-        CALIBRATING_3D_MATRIX...<br/>
-        <span className="text-accent mt-1 inline-block">STATUS: ONLINE</span>
-      </div>
-      
-      <div className="absolute bottom-12 right-12 font-mono text-[10px] text-muted-foreground uppercase tracking-widest text-right hidden md:block z-50">
-        TECHNICAL<br/>
-        ANALYSIS_MATRIX
-      </div>
-
-      {/* 3D Composition Wrappers */}
-      <div ref={scrollWrapperRef} className="relative w-full h-full max-w-7xl mx-auto flex items-center justify-center transform-style-3d">
-        <div ref={mouseWrapperRef} className="relative w-full h-[80vh] transform-style-3d">
-
-          {/* Decorative Geometric Rings / Technical Guides */}
-          <div className="tech-element absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] border-[1px] border-foreground/10 rounded-full transform-style-3d pointer-events-none" data-depth="-1" />
-          <div className="tech-element absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] border-[1px] border-accent/10 rounded-full transform-style-3d pointer-events-none" data-depth="1" />
-          <div className="tech-element absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-[80vh] bg-foreground/5 transform-style-3d pointer-events-none" data-depth="0" />
-          <div className="tech-element absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[1px] bg-foreground/5 transform-style-3d pointer-events-none" data-depth="0" />
-
-          {/* Skill 1: HTML */}
-          <div className="tech-element absolute top-[10%] left-[10%] md:left-[15%] transform-style-3d" data-depth="-0.5">
-            <div className="font-mono text-[10px] text-muted-foreground mb-1 border-b border-foreground/10 pb-1">01 // MARKUP</div>
-            <div className="font-display text-5xl md:text-7xl font-bold tracking-tighter uppercase text-foreground mix-blend-multiply">HTML</div>
-          </div>
-
-          {/* Skill 2: CSS */}
-          <div className="tech-element absolute top-[20%] right-[10%] md:right-[15%] transform-style-3d" data-depth="0.8">
-            <div className="font-mono text-[10px] text-muted-foreground mb-1 border-b border-foreground/10 pb-1 text-right">02 // STYLE</div>
-            <div className="font-display text-6xl md:text-8xl font-bold tracking-tighter uppercase text-foreground mix-blend-multiply">CSS</div>
-          </div>
-
-          {/* Skill 3: JAVA (Center / Core) */}
-          <div className="tech-element absolute top-[45%] left-[50%] -translate-x-1/2 -translate-y-1/2 transform-style-3d z-50" data-depth="2">
-            <div className="relative flex flex-col items-center">
-              <div className="font-mono text-[10px] text-accent mb-2 text-center tracking-[0.3em] border border-accent/20 bg-accent/5 px-3 py-1">03 // CORE</div>
-              <div className="font-display text-[18vw] md:text-[14vw] font-bold tracking-tighter uppercase text-foreground mix-blend-multiply leading-none">JAVA</div>
-              {/* Subtle offset shadow/glitch layer */}
-              <div className="absolute top-8 left-2 font-display text-[18vw] md:text-[14vw] font-bold tracking-tighter uppercase text-accent/20 pointer-events-none leading-none">JAVA</div>
+      <div className="mt-16 space-y-10 md:mt-20 md:space-y-14">
+        {SKILL_ROWS.map((row) => (
+          <div key={row.note} className="skill-row relative">
+            <div className="skill-track flex w-max items-baseline gap-10 whitespace-nowrap will-change-transform md:gap-16">
+              {[...row.items, ...row.items].map((item, i) => (
+                <span key={`${item}-${i}`} className="flex items-baseline gap-10 md:gap-16">
+                  <span
+                    className={`font-black-display text-[clamp(2.6rem,7vw,6.5rem)] uppercase leading-none ${
+                      i % 2 === 0 ? "text-foreground" : "text-foreground/25"
+                    }`}
+                  >
+                    {item}
+                  </span>
+                  <span className="h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true" />
+                </span>
+              ))}
             </div>
+            <span className="absolute -top-5 left-6 font-sans text-[10px] font-semibold uppercase tracking-[0.28em] text-muted-foreground md:left-14">
+              {row.note}
+            </span>
           </div>
-
-          {/* Skill 4: C */}
-          <div className="tech-element absolute bottom-[25%] left-[12%] md:left-[20%] transform-style-3d" data-depth="1.2">
-            <div className="font-mono text-[10px] text-muted-foreground mb-1 border-b border-foreground/10 pb-1">04 // SYSTEM</div>
-            <div className="font-display text-6xl md:text-8xl font-bold tracking-tighter uppercase text-foreground mix-blend-multiply">C</div>
-          </div>
-
-          {/* Skill 5: RDBMS / SQL */}
-          <div className="tech-element absolute bottom-[15%] right-[12%] md:right-[20%] transform-style-3d" data-depth="-0.8">
-            <div className="font-mono text-[10px] text-muted-foreground mb-1 border-b border-foreground/10 pb-1 text-right">05 // DATA</div>
-            <div className="font-display text-4xl md:text-6xl font-bold tracking-tighter uppercase text-foreground mix-blend-multiply">RDBMS / SQL</div>
-          </div>
-
-        </div>
+        ))}
       </div>
-      
+
+      {/* learning-now strip */}
+      <div className="mx-auto mt-20 flex max-w-[1500px] items-center gap-5 px-6 md:px-14">
+        <span className="hairline w-16 shrink-0" />
+        <p className="font-sans text-xs uppercase tracking-[0.22em] text-muted-foreground">
+          Currently learning — <span className="font-semibold text-foreground">Node.js · System Design · DSA in Java</span>
+        </p>
+      </div>
     </section>
   );
 };

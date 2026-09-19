@@ -1,191 +1,149 @@
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ActHeader } from "./ActHeader";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
-    num: '01',
-    title: 'AWS Weather\nIntelligence',
-    tech: 'React / AWS / Data Viz',
-    desc: 'Dashboard for weather-station monitoring and anomaly detection.',
+    num: "01",
+    title: "AWS Weather Intelligence",
+    tech: "React / AWS / Data Viz",
+    desc: "Dashboard for weather-station monitoring and anomaly detection.",
   },
   {
-    num: '02',
-    title: 'Calisthenics\nAcademy',
-    tech: 'Fullstack / Database',
-    desc: 'Website with trial booking, backend, database and admin functionality.',
+    num: "02",
+    title: "Calisthenics Academy",
+    tech: "Fullstack / Database",
+    desc: "Website with trial booking, backend, database and admin functionality.",
   },
   {
-    num: '03',
-    title: 'Student\nManagement',
-    tech: 'Java / OOP',
-    desc: 'Java system utilizing ArrayList and Exception Handling.',
+    num: "03",
+    title: "Student Management",
+    tech: "Java / OOP",
+    desc: "Java system utilizing ArrayList and Exception Handling.",
   },
   {
-    num: '04',
-    title: 'NGO\nWebsite',
-    tech: 'HTML / CSS / JS',
-    desc: 'Informational platform for a non-profit organization.',
+    num: "04",
+    title: "NGO Website",
+    tech: "HTML / CSS / JS",
+    desc: "Informational platform for a non-profit organization.",
   },
   {
-    num: '05',
-    title: 'CODEZ',
-    tech: 'Creative Frontend',
-    desc: 'Creative frontend experiments and web concepts.',
-  }
+    num: "05",
+    title: "CODEZ",
+    tech: "Creative Frontend",
+    desc: "Creative frontend experiments and web concepts.",
+  },
 ];
 
+/** Subtle 3D tilt that follows the cursor across a card. */
+function useTilt() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+
+    const rx = gsap.quickTo(el, "rotationX", { duration: 0.6, ease: "power3" });
+    const ry = gsap.quickTo(el, "rotationY", { duration: 0.6, ease: "power3" });
+    gsap.set(el, { transformPerspective: 900 });
+
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      ry(px * 8);
+      rx(py * -8);
+    };
+    const onLeave = () => {
+      rx(0);
+      ry(0);
+    };
+
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  return ref;
+}
+
+function ProjectCard({ project }: { project: (typeof projects)[number] }) {
+  const tiltRef = useTilt();
+
+  return (
+    <div ref={tiltRef} className="tilt-card" data-cursor="active">
+      <article className="tilt-inner group relative flex h-full flex-col border border-foreground/10 bg-card p-7 transition-colors duration-300 hover:border-accent/50 md:p-8">
+        <div className="flex items-start justify-between">
+          <span className="font-display text-4xl font-black text-foreground/10 transition-colors duration-300 group-hover:text-accent/30 md:text-5xl">
+            {project.num}
+          </span>
+          <span className="mt-2 h-2 w-2 rounded-full bg-accent/0 ring-1 ring-foreground/20 transition-all duration-300 group-hover:bg-accent group-hover:ring-accent" />
+        </div>
+
+        <h3 className="mt-6 font-display text-2xl font-bold uppercase leading-tight tracking-tight text-foreground md:text-[1.7rem]">
+          {project.title}
+        </h3>
+
+        <p className="mt-3 flex-1 font-sans text-sm leading-relaxed text-muted-foreground">{project.desc}</p>
+
+        <div className="mt-8 flex items-center justify-between border-t border-foreground/10 pt-4">
+          <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            {project.tech}
+          </span>
+          <span className="translate-x-0 font-sans text-sm text-accent opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100">
+            ↗
+          </span>
+        </div>
+      </article>
+    </div>
+  );
+}
+
 export const ProjectsSection = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const track = trackRef.current;
-      if (!track || !containerRef.current) return;
-
-      const totalProjects = projects.length;
-
-      // Horizontal Scroll Animation
-      const scrollTween = gsap.to(track, {
-        xPercent: -100 + (100 / totalProjects),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: containerRef.current,
-          pin: true,
-          scrub: 1,
-          start: 'top top',
-          end: `+=${totalProjects * 100}%`,
+      gsap.fromTo(
+        ".project-card",
+        { opacity: 0, y: 70, rotateX: 10 },
+        {
+          opacity: 1,
+          y: 0,
+          rotateX: 0,
+          duration: 0.9,
+          stagger: 0.1,
+          ease: "power3.out",
+          scrollTrigger: { trigger: gridRef.current, start: "top 78%" },
         }
-      });
-
-      // Parallax effects inside each project
-      const panels = gsap.utils.toArray('.project-panel');
-      panels.forEach((panel: any) => {
-        const img = panel.querySelector('.project-img-inner');
-        const title = panel.querySelector('.project-title');
-        const num = panel.querySelector('.project-num');
-
-        // Image parallax (moves opposite to scroll direction)
-        if (img) {
-          gsap.fromTo(img, 
-            { x: '-15vw', scale: 1.1 }, 
-            { x: '15vw', scale: 1, ease: 'none',
-              scrollTrigger: {
-                trigger: panel,
-                containerAnimation: scrollTween,
-                start: 'left right',
-                end: 'right left',
-                scrub: true
-              }
-            }
-          );
-        }
-
-        // Title parallax
-        if (title) {
-          gsap.fromTo(title,
-            { x: '10vw' },
-            { x: '-10vw', ease: 'none',
-              scrollTrigger: {
-                trigger: panel,
-                containerAnimation: scrollTween,
-                start: 'left right',
-                end: 'right left',
-                scrub: true
-              }
-            }
-          );
-        }
-        
-        // Number parallax
-        if (num) {
-          gsap.fromTo(num,
-            { x: '5vw', y: '5vh' },
-            { x: '-5vw', y: '-5vh', ease: 'none',
-              scrollTrigger: {
-                trigger: panel,
-                containerAnimation: scrollTween,
-                start: 'left right',
-                end: 'right left',
-                scrub: true
-              }
-            }
-          );
-        }
-      });
-
-    }, containerRef);
-
+      );
+    }, gridRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section id="projects" ref={containerRef} className="relative z-20 w-full h-screen overflow-hidden bg-background">
-      
-      {/* Horizontal Track */}
-      <div 
-        ref={trackRef} 
-        className="flex h-full will-change-transform"
-        style={{ width: `${projects.length * 100}vw` }}
-      >
-        {projects.map((project) => (
-          <div 
-            key={project.num}
-            className="project-panel relative w-screen h-full flex items-center justify-center p-6 md:p-12"
-          >
-            {/* Background number */}
-            <div className="project-num absolute top-[10vh] left-[5vw] font-display text-[25vw] leading-none text-foreground/[0.02] pointer-events-none select-none z-0 font-bold">
-              {project.num}
+    <section id="build" className="relative w-full pb-28 pt-4 md:pb-36">
+      <ActHeader word="BUILD" kicker="01 / Projects" sub="Selected work — shipped, in progress, and always iterating." />
+
+      <div ref={gridRef} className="mx-auto mt-14 max-w-[1500px] px-6 md:px-14" style={{ perspective: "1200px" }}>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {projects.map((p, i) => (
+            <div
+              key={p.num}
+              className={`project-card ${i === 0 ? "sm:col-span-2 lg:col-span-2 lg:row-span-1" : ""}`}
+            >
+              <ProjectCard project={p} />
             </div>
-
-            <div className="relative w-full max-w-7xl h-[75vh] flex flex-col md:flex-row items-center gap-12 z-10">
-              
-              {/* Project Image Placeholder */}
-              <div 
-                className="relative w-full md:w-[60%] h-full overflow-hidden bg-accent/5 border border-accent/10 shadow-sm cursor-none"
-                data-cursor-type="project"
-              >
-                <div className="project-img-inner absolute -inset-x-24 inset-y-0 bg-accent/10 flex items-center justify-center will-change-transform">
-                  <div className="flex flex-col items-center gap-2">
-                    <span className="w-8 h-8 border border-accent/30 rounded-full flex items-center justify-center">
-                      <span className="w-1 h-1 bg-accent rounded-full" />
-                    </span>
-                    <span className="text-accent/60 font-mono tracking-widest text-[10px] uppercase">Project Preview</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Project Details */}
-              <div className="w-full md:w-[40%] flex flex-col justify-center shrink-0">
-                <div className="flex items-center gap-4 mb-6">
-                  <span className="text-accent font-mono font-bold text-[10px] tracking-widest bg-accent/10 px-2 py-1">PROJECT {project.num}</span>
-                  <div className="h-[1px] w-12 bg-accent/30" />
-                </div>
-                
-                <h2 className="project-title font-display text-4xl md:text-5xl lg:text-6xl uppercase tracking-tight leading-[1] mb-8 whitespace-pre-line will-change-transform font-bold text-foreground">
-                  {project.title}
-                </h2>
-                
-                <div className="flex flex-col gap-2 mb-8 border-l border-accent/30 pl-4">
-                  <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Technology</span>
-                  <span className="font-sans text-xs font-semibold uppercase tracking-widest text-foreground">{project.tech}</span>
-                </div>
-
-                <p className="font-sans text-sm leading-relaxed text-muted-foreground mb-12 max-w-sm uppercase tracking-wider">
-                  {project.desc}
-                </p>
-
-                <button data-cursor-type="link" className="self-start text-[10px] font-bold uppercase tracking-widest border-b border-foreground/30 pb-1 hover:text-accent hover:border-accent transition-colors flex items-center gap-2">
-                  Explore Project <span className="text-accent">↗</span>
-                </button>
-              </div>
-              
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
